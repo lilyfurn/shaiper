@@ -1,0 +1,153 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://schemas.shaiper.invalid/artifact-manifest.v1.schema.json",
+  "title": "Shaiper Block 0 single-image artifact bundle",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "artifactId", "jobId", "createdAt", "sourceImages", "engine", "settings", "provenance", "scaleStatus", "metersPerUnit", "depthConvention", "cameraFile", "geometry", "transformHistory", "operations", "quality", "files", "warnings"],
+  "properties": {
+    "schemaVersion": {"const": "1.0.0"},
+    "artifactId": {"$ref": "#/definitions/id"},
+    "jobId": {"$ref": "#/definitions/id"},
+    "createdAt": {"type": "string", "format": "date-time"},
+    "sourceImages": {"type": "array", "minItems": 1, "maxItems": 1, "items": {"$ref": "#/definitions/sourceImage"}},
+    "engine": {"$ref": "#/definitions/engine"},
+    "settings": {
+      "type": "object", "additionalProperties": false,
+      "required": ["maxEdge", "maxRelativeEdge", "device", "useRayPose"],
+      "properties": {
+        "maxEdge": {"type": "integer", "minimum": 140, "maximum": 1008, "multipleOf": 14},
+        "maxRelativeEdge": {"type": "number", "exclusiveMinimum": 0, "maximum": 1},
+        "device": {"enum": ["cuda", "cpu"]}, "useRayPose": {"const": false}
+      }
+    },
+    "provenance": {"const": "single_image_estimated"},
+    "scaleStatus": {"const": "unknown"},
+    "metersPerUnit": {"type": "null"},
+    "depthConvention": {"enum": ["optical_axis_z", "ray_distance"]},
+    "cameraFile": {"const": "camera.json"},
+    "geometry": {
+      "type": "object", "additionalProperties": false,
+      "required": ["pointCloud", "partialMesh", "coordinateFrame", "physicalUnits", "openSurface"],
+      "properties": {
+        "pointCloud": {
+          "type": "object", "additionalProperties": false,
+          "required": ["file", "kind", "pointCount", "bounds"],
+          "properties": {"file": {"const": "pointcloud.ply"}, "kind": {"const": "point_cloud"}, "pointCount": {"type": "integer", "minimum": 3}, "bounds": {"$ref": "#/definitions/bounds"}}
+        },
+        "partialMesh": {
+          "type": "object", "additionalProperties": false,
+          "required": ["file", "kind", "vertexCount", "faceCount", "bounds"],
+          "properties": {
+            "file": {"const": "surface.obj"}, "kind": {"const": "triangle_mesh"},
+            "vertexCount": {"type": "integer", "minimum": 3}, "faceCount": {"type": "integer", "minimum": 1}, "bounds": {"$ref": "#/definitions/bounds"}
+          }
+        },
+        "coordinateFrame": {"$ref": "#/definitions/frame"},
+        "physicalUnits": {"const": "arbitrary"}, "openSurface": {"const": true}
+      }
+    },
+    "transformHistory": {
+      "type": "array", "minItems": 1, "maxItems": 1,
+      "items": {
+        "type": "object", "additionalProperties": false, "required": ["name", "matrix", "normalized"],
+        "properties": {"name": {"const": "T_export_from_reconstruction"}, "matrix": {"$ref": "#/definitions/matrix4"}, "normalized": {"const": false}}
+      }
+    },
+    "operations": {
+      "type": "object", "additionalProperties": false,
+      "required": ["invalidDepthRejected", "confidenceFilter", "userMask", "mesh", "samplingStride", "decimation"],
+      "properties": {
+        "invalidDepthRejected": {"const": true}, "confidenceFilter": {"type": "null"}, "userMask": {"type": "null"},
+        "samplingStride": {"const": 1}, "decimation": {"type": "null"},
+        "mesh": {
+          "type": "object", "additionalProperties": false, "required": ["algorithm", "maxRelativeDepthEdge", "holeFilling"],
+          "properties": {"algorithm": {"const": "depth_grid"}, "maxRelativeDepthEdge": {"type": "number", "exclusiveMinimum": 0, "maximum": 1}, "holeFilling": {"const": false}}
+        }
+      }
+    },
+    "quality": {
+      "type": "object", "additionalProperties": false,
+      "required": ["validDepthFraction", "rejectedFaceFraction", "modelConfidenceAvailable", "accuracy", "independentValidation"],
+      "properties": {
+        "validDepthFraction": {"type": "number", "minimum": 0, "maximum": 1},
+        "rejectedFaceFraction": {"type": "number", "minimum": 0, "maximum": 1},
+        "modelConfidenceAvailable": {"type": "boolean"}, "accuracy": {"type": "null"},
+        "independentValidation": {"const": "not_performed"}
+      }
+    },
+    "files": {"type": "array", "minItems": 7, "maxItems": 7, "items": {"$ref": "#/definitions/file"}},
+    "warnings": {"type": "array", "minItems": 1, "items": {"type": "string"}}
+  },
+  "definitions": {
+    "bounds": {
+      "type": "object", "additionalProperties": false, "required": ["min", "max"],
+      "properties": {"min": {"$ref": "#/definitions/vector3"}, "max": {"$ref": "#/definitions/vector3"}}
+    },
+    "id": {"type": "string", "pattern": "^[a-f0-9]{32}$"},
+    "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "commit": {"type": "string", "pattern": "^[a-f0-9]{40}$"},
+    "vector3": {"type": "array", "minItems": 3, "maxItems": 3, "items": {"type": "number"}},
+    "matrix3": {"type": "array", "minItems": 3, "maxItems": 3, "items": {"$ref": "#/definitions/vector3"}},
+    "matrix4": {"type": "array", "minItems": 4, "maxItems": 4, "items": {"type": "array", "minItems": 4, "maxItems": 4, "items": {"type": "number"}}},
+    "size": {"type": "array", "minItems": 2, "maxItems": 2, "items": {"type": "integer", "minimum": 2}},
+    "frame": {"enum": ["camera_x_right_y_down_z_forward", "viewer_y_up"]},
+    "preprocessing": {
+      "type": "object", "additionalProperties": false,
+      "required": ["exifOrientation", "T_oriented_from_original_pixels", "orientedSize", "T_working_from_oriented_pixels", "pixelConvention", "resizeFilter", "colorConversion", "alphaCompositedOnWhite", "crop", "padding", "undistortionApplied", "metadataStripped"],
+      "properties": {
+        "exifOrientation": {"type": "integer", "minimum": 1, "maximum": 8},
+        "T_oriented_from_original_pixels": {"$ref": "#/definitions/matrix3"},
+        "orientedSize": {"$ref": "#/definitions/size"}, "T_working_from_oriented_pixels": {"$ref": "#/definitions/matrix3"},
+        "pixelConvention": {"const": "integer_pixel_centers"}, "resizeFilter": {"const": "lanczos"},
+        "colorConversion": {"enum": ["embedded_icc_to_srgb", "pillow_rgb_assumed_srgb"]},
+        "alphaCompositedOnWhite": {"type": "boolean"}, "crop": {"type": "null"}, "padding": {"type": "null"},
+        "undistortionApplied": {"const": false}, "metadataStripped": {"const": true}
+      }
+    },
+    "sourceImage": {
+      "type": "object", "additionalProperties": false,
+      "required": ["imageId", "sha256", "byteSize", "storageGeneration", "format", "originalSize", "workingSize", "preprocessing"],
+      "properties": {
+        "imageId": {"$ref": "#/definitions/id"}, "sha256": {"$ref": "#/definitions/sha256"},
+        "byteSize": {"type": "integer", "minimum": 1, "maximum": 26214400}, "storageGeneration": {"type": "null"},
+        "format": {"enum": ["JPEG", "PNG"]}, "originalSize": {"$ref": "#/definitions/size"},
+        "workingSize": {"$ref": "#/definitions/size"}, "preprocessing": {"$ref": "#/definitions/preprocessing"}
+      }
+    },
+    "engine": {
+      "type": "object", "additionalProperties": false,
+      "required": ["name", "packageVersion", "sourceCommit", "modelId", "modelRevision", "weightsSha256", "configSha256", "license", "containerDigest", "torchVersion", "numpyVersion"],
+      "properties": {
+        "name": {"const": "depth-anything-3"}, "packageVersion": {"type": "string"}, "sourceCommit": {"$ref": "#/definitions/commit"},
+        "modelId": {"const": "depth-anything/DA3-SMALL"}, "modelRevision": {"$ref": "#/definitions/commit"},
+        "weightsSha256": {"$ref": "#/definitions/sha256"}, "configSha256": {"$ref": "#/definitions/sha256"},
+        "license": {"const": "Apache-2.0"}, "containerDigest": {"type": "null"},
+        "torchVersion": {"type": "string"}, "numpyVersion": {"type": "string"}
+      }
+    },
+    "file": {
+      "type": "object", "additionalProperties": false, "required": ["name", "format", "byteSize", "sha256"],
+      "properties": {
+        "name": {"enum": ["working.png", "camera.json", "depth.npz", "pointcloud.ply", "surface.obj", "benchmark.json", "benchmark.md"]},
+        "format": {"enum": ["png", "json", "npz", "ply", "obj", "markdown"]},
+        "byteSize": {"type": "integer", "minimum": 1}, "sha256": {"$ref": "#/definitions/sha256"}
+      }
+    },
+    "cameraMetadata": {
+      "type": "object", "additionalProperties": false,
+      "required": ["schemaVersion", "imageId", "resolution", "K_working", "intrinsicsSource", "distortion", "depthConvention", "depthScale", "scaleStatus", "metersPerUnit", "reconstructionFrame", "exportFrame", "T_reconstruction_from_camera", "T_export_from_reconstruction", "T_model_camera_from_world", "T_model_world_from_camera", "modelPoseUsedForGeometry", "poseSource", "preprocessing"],
+      "properties": {
+        "schemaVersion": {"const": "1.0.0"}, "imageId": {"$ref": "#/definitions/id"}, "resolution": {"$ref": "#/definitions/size"},
+        "K_working": {"$ref": "#/definitions/matrix3"}, "intrinsicsSource": {"const": "model_estimated"},
+        "distortion": {"const": "unmodeled_no_undistortion"}, "depthConvention": {"enum": ["optical_axis_z", "ray_distance"]},
+        "depthScale": {"const": "relative"}, "scaleStatus": {"const": "unknown"}, "metersPerUnit": {"type": "null"},
+        "reconstructionFrame": {"const": "camera_x_right_y_down_z_forward"}, "exportFrame": {"$ref": "#/definitions/frame"},
+        "T_reconstruction_from_camera": {"$ref": "#/definitions/matrix4"}, "T_export_from_reconstruction": {"$ref": "#/definitions/matrix4"},
+        "T_model_camera_from_world": {"$ref": "#/definitions/matrix4"}, "T_model_world_from_camera": {"$ref": "#/definitions/matrix4"},
+        "modelPoseUsedForGeometry": {"const": false}, "poseSource": {"const": "single_camera_identity"},
+        "preprocessing": {"$ref": "#/definitions/preprocessing"}
+      }
+    }
+  }
+}

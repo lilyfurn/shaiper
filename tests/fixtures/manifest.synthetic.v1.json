@@ -1,0 +1,55 @@
+{
+  "schemaVersion": "1.0.0",
+  "artifactId": "00000000000000000000000000000001",
+  "jobId": "00000000000000000000000000000002",
+  "createdAt": "2026-09-07T00:00:00+00:00",
+  "sourceImages": [{
+    "imageId": "00000000000000000000000000000003",
+    "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+    "byteSize": 1, "storageGeneration": null, "format": "PNG",
+    "originalSize": [42, 42], "workingSize": [42, 42],
+    "preprocessing": {
+      "exifOrientation": 1,
+      "T_oriented_from_original_pixels": [[1, 0, 0], [0, 1, 0], [0, 0, 1]],
+      "orientedSize": [42, 42],
+      "T_working_from_oriented_pixels": [[1, 0, 0], [0, 1, 0], [0, 0, 1]],
+      "pixelConvention": "integer_pixel_centers", "resizeFilter": "lanczos",
+      "colorConversion": "pillow_rgb_assumed_srgb", "alphaCompositedOnWhite": false,
+      "crop": null, "padding": null, "undistortionApplied": false, "metadataStripped": true
+    }
+  }],
+  "engine": {
+    "name": "depth-anything-3", "packageVersion": "synthetic-test-only",
+    "sourceCommit": "0000000000000000000000000000000000000000",
+    "modelId": "depth-anything/DA3-SMALL", "modelRevision": "0000000000000000000000000000000000000000",
+    "weightsSha256": "0000000000000000000000000000000000000000000000000000000000000000",
+    "configSha256": "0000000000000000000000000000000000000000000000000000000000000000",
+    "license": "Apache-2.0", "containerDigest": null,
+    "torchVersion": "synthetic-test-only", "numpyVersion": "synthetic-test-only"
+  },
+  "settings": {"maxEdge": 504, "maxRelativeEdge": 0.1, "device": "cpu", "useRayPose": false},
+  "provenance": "single_image_estimated", "scaleStatus": "unknown", "metersPerUnit": null,
+  "depthConvention": "optical_axis_z", "cameraFile": "camera.json",
+  "geometry": {
+    "pointCloud": {"file": "pointcloud.ply", "kind": "point_cloud", "pointCount": 9, "bounds": {"min": [-1, -1, -2], "max": [1, 1, -2]}},
+    "partialMesh": {"file": "surface.obj", "kind": "triangle_mesh", "vertexCount": 9, "faceCount": 8, "bounds": {"min": [-1, -1, -2], "max": [1, 1, -2]}},
+    "coordinateFrame": "viewer_y_up", "physicalUnits": "arbitrary", "openSurface": true
+  },
+  "transformHistory": [{"name": "T_export_from_reconstruction", "matrix": [[1, 0, 0, 0], [0, -1, 0, 0], [0, 0, -1, 0], [0, 0, 0, 1]], "normalized": false}],
+  "operations": {
+    "invalidDepthRejected": true, "confidenceFilter": null, "userMask": null,
+    "mesh": {"algorithm": "depth_grid", "maxRelativeDepthEdge": 0.1, "holeFilling": false},
+    "samplingStride": 1, "decimation": null
+  },
+  "quality": {"validDepthFraction": 1, "rejectedFaceFraction": 0, "modelConfidenceAvailable": false, "accuracy": null, "independentValidation": "not_performed"},
+  "files": [
+    {"name": "working.png", "format": "png", "byteSize": 1, "sha256": "0000000000000000000000000000000000000000000000000000000000000000"},
+    {"name": "camera.json", "format": "json", "byteSize": 1, "sha256": "0000000000000000000000000000000000000000000000000000000000000000"},
+    {"name": "depth.npz", "format": "npz", "byteSize": 1, "sha256": "0000000000000000000000000000000000000000000000000000000000000000"},
+    {"name": "pointcloud.ply", "format": "ply", "byteSize": 1, "sha256": "0000000000000000000000000000000000000000000000000000000000000000"},
+    {"name": "surface.obj", "format": "obj", "byteSize": 1, "sha256": "0000000000000000000000000000000000000000000000000000000000000000"},
+    {"name": "benchmark.json", "format": "json", "byteSize": 1, "sha256": "0000000000000000000000000000000000000000000000000000000000000000"},
+    {"name": "benchmark.md", "format": "markdown", "byteSize": 1, "sha256": "0000000000000000000000000000000000000000000000000000000000000000"}
+  ],
+  "warnings": ["SYNTHETIC CONTRACT FIXTURE. No files or inference results are represented by these placeholder hashes."]
+}

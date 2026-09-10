@@ -1,0 +1,11 @@
+object_id,category,status,single_photo_path,multiview_directory,photo_permission,independent_dimension_mm,measurement_method,viewer_version,run_directory,visible_failures,decision
+object-01,textured_box,not_captured,,,,,,,,,
+object-02,textured_curved_container,not_captured,,,,,,,,,
+object-03,matte_figurine,not_captured,,,,,,,,,
+object-04,rounded_opaque_object,not_captured,,,,,,,,,
+object-05,thin_flat_part,not_captured,,,,,,,,,
+object-06,thin_protrusions,not_captured,,,,,,,,,
+object-07,low_texture_matte_part,not_captured,,,,,,,,,
+object-08,shiny_metal_part,not_captured,,,,,,,,,
+object-09,dark_opaque_object,not_captured,,,,,,,,,
+object-10,concave_opaque_object,not_captured,,,,,,,,,

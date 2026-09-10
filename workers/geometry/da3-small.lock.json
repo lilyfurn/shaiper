@@ -1,0 +1,15 @@
+{
+  "schemaVersion": "1.0.0",
+  "modelId": "depth-anything/DA3-SMALL",
+  "modelName": "da3-small",
+  "modelRevision": "e08cab65ca0ec38e7826075418411ab90cab4da3",
+  "weightsFile": "model.safetensors",
+  "weightsByteSize": 137248940,
+  "weightsSha256": "364492e38a3a06d221ac75da7f6621ada3f2361cd24fde11ba79091e9f40efcf",
+  "sourceRepository": "https://github.com/ByteDance-Seed/Depth-Anything-3",
+  "sourceCommit": "3d835ec1a5802d64a8b8b15f817a1ab54809bfe4",
+  "license": "Apache-2.0",
+  "depthConvention": "optical_axis_z",
+  "scaleStatus": "unknown",
+  "evidence": "https://huggingface.co/depth-anything/DA3-SMALL/commit/e08cab65ca0ec38e7826075418411ab90cab4da3"
+}
